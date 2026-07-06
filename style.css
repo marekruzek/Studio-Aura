@@ -410,6 +410,31 @@ h2 {
   margin-top: 22px;
 }
 
+.portfolio-page {
+  min-height: 100svh;
+}
+
+.work.portfolio-page {
+  padding-top: 118px;
+}
+
+.portfolio-page__top {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: end;
+  justify-content: space-between;
+  gap: 18px;
+  margin-bottom: 30px;
+}
+
+.portfolio-page__top h1 {
+  font-size: clamp(42px, 8vw, 82px);
+}
+
+.gallery--full {
+  grid-template-columns: repeat(auto-fit, minmax(175px, 1fr));
+}
+
 .price-list {
   padding: 10px 22px;
 }
@@ -674,6 +699,10 @@ h2 {
     padding-block: 72px;
   }
 
+  .work.portfolio-page {
+    padding-top: 118px;
+  }
+
   .about__grid,
   .contact__grid,
   .pricing__grid,
@@ -690,6 +719,12 @@ h2 {
   .gallery__item:nth-child(4) {
     grid-column: span 2;
     aspect-ratio: 8 / 5;
+  }
+
+  .gallery--full .gallery__item:nth-child(1),
+  .gallery--full .gallery__item:nth-child(4) {
+    grid-column: auto;
+    aspect-ratio: 4 / 5;
   }
 }
 

@@ -105,6 +105,7 @@ const validateForm = () => {
   return isValid;
 };
 
+if (form) {
 form.addEventListener("submit", (event) => {
   event.preventDefault();
   formMessage.classList.remove("is-success");
@@ -118,6 +119,7 @@ form.addEventListener("submit", (event) => {
   formMessage.textContent = "Děkuji, poptávka byla připravena k odeslání.";
   formMessage.classList.add("is-success");
 });
+}
 
 const revealObserver = new IntersectionObserver((entries) => {
   entries.forEach((entry) => {
