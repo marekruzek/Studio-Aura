@@ -260,6 +260,10 @@ h2 {
   background: var(--white);
 }
 
+.pricing {
+  scroll-margin-top: 0;
+}
+
 .about__grid,
 .contact__grid,
 .pricing__grid,
@@ -314,9 +318,9 @@ h2 {
 
 .timeline__item {
   display: grid;
-  min-height: 72px;
-  gap: 2px;
-  padding: 5px 8px;
+  min-height: 104px;
+  gap: 8px;
+  padding: 20px 18px;
 }
 
 .timeline__item span {
