@@ -12,6 +12,7 @@ const sliderPrev = document.querySelector("[data-slider-prev]");
 const sliderNext = document.querySelector("[data-slider-next]");
 const form = document.querySelector("[data-form]");
 const formMessage = document.querySelector("[data-form-message]");
+const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
 
 const setHeaderState = () => {
   header.classList.toggle("is-scrolled", window.scrollY > 24);
@@ -26,11 +27,36 @@ menuToggle.addEventListener("click", () => {
   menuToggle.setAttribute("aria-expanded", String(isOpen));
 });
 
-nav.querySelectorAll("a").forEach((link) => {
-  link.addEventListener("click", () => {
+const getSectionCenterScrollTop = (section) => {
+  const sectionRect = section.getBoundingClientRect();
+  const sectionCenter = window.scrollY + sectionRect.top + sectionRect.height / 2;
+
+  return sectionCenter - window.innerHeight / 2;
+};
+
+const getScrollBehavior = () => prefersReducedMotion.matches ? "auto" : "smooth";
+
+nav.querySelectorAll('a[href^="#"]').forEach((link) => {
+  link.addEventListener("click", (event) => {
+    const sectionId = link.getAttribute("href");
+    const section = sectionId ? document.querySelector(sectionId) : null;
+
+    if (!section) {
+      return;
+    }
+
+    event.preventDefault();
     nav.classList.remove("is-open");
     header.classList.remove("is-open");
     menuToggle.setAttribute("aria-expanded", "false");
+
+    const targetPosition = getSectionCenterScrollTop(section);
+    const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
+
+    window.scrollTo({
+      top: Math.max(0, Math.min(targetPosition, maxScroll)),
+      behavior: getScrollBehavior(),
+    });
   });
 });
 
@@ -67,27 +93,84 @@ document.addEventListener("keydown", (event) => {
 });
 
 accordionButtons.forEach((button) => {
-  button.addEventListener("click", () => {
-    const item = button.parentElement;
-    const isOpen = item.classList.toggle("is-open");
-    button.setAttribute("aria-expanded", String(isOpen));
-  });
+  const item = button.parentElement;
+  const openItem = () => {
+    item.classList.add("is-open");
+    button.setAttribute("aria-expanded", "true");
+  };
+  const closeItem = () => {
+    item.classList.remove("is-open");
+    button.setAttribute("aria-expanded", "false");
+  };
+
+  item.addEventListener("mouseenter", openItem);
+  item.addEventListener("mouseleave", closeItem);
+  button.addEventListener("focus", openItem);
+  button.addEventListener("blur", closeItem);
 });
 
-let reviewIndex = 0;
-const reviews = sliderTrack ? sliderTrack.children.length : 0;
+let reviewIndex = 1;
+let reviews = 0;
+let isReviewMoving = false;
 
-const showReview = (index) => {
-  reviewIndex = (index + reviews) % reviews;
+const setReviewPosition = (withTransition = true) => {
   const slideWidth = sliderTrack.firstElementChild.getBoundingClientRect().width;
+  sliderTrack.style.transition = withTransition ? "transform 0.35s ease" : "none";
   sliderTrack.style.transform = `translateX(-${reviewIndex * slideWidth}px)`;
 };
 
-if (sliderTrack && reviews > 0) {
-  sliderPrev.addEventListener("click", () => showReview(reviewIndex - 1));
-  sliderNext.addEventListener("click", () => showReview(reviewIndex + 1));
-  window.addEventListener("resize", () => showReview(reviewIndex));
-  setInterval(() => showReview(reviewIndex + 1), 6500);
+const showReview = (direction) => {
+  if (isReviewMoving) {
+    return;
+  }
+
+  isReviewMoving = true;
+  reviewIndex += direction;
+  setReviewPosition();
+};
+
+if (sliderTrack && sliderTrack.children.length > 0) {
+  const originalReviews = [...sliderTrack.children];
+  reviews = originalReviews.length;
+  const firstReviewClone = originalReviews[0].cloneNode(true);
+  const lastReviewClone = originalReviews[reviews - 1].cloneNode(true);
+
+  sliderTrack.append(firstReviewClone);
+  sliderTrack.prepend(lastReviewClone);
+  setReviewPosition(false);
+  sliderTrack.offsetHeight;
+  sliderTrack.style.transition = "transform 0.35s ease";
+
+  sliderTrack.addEventListener("transitionend", (event) => {
+    if (event.propertyName !== "transform") {
+      return;
+    }
+
+    if (reviewIndex === reviews + 1) {
+      reviewIndex = 1;
+      setReviewPosition(false);
+      sliderTrack.offsetHeight;
+      sliderTrack.style.transition = "transform 0.35s ease";
+    }
+
+    if (reviewIndex === 0) {
+      reviewIndex = reviews;
+      setReviewPosition(false);
+      sliderTrack.offsetHeight;
+      sliderTrack.style.transition = "transform 0.35s ease";
+    }
+
+    isReviewMoving = false;
+  });
+
+  sliderPrev.addEventListener("click", () => showReview(-1));
+  sliderNext.addEventListener("click", () => showReview(1));
+  window.addEventListener("resize", () => setReviewPosition(false));
+  setInterval(() => {
+    if (!isReviewMoving) {
+      showReview(1);
+    }
+  }, 6500);
 }
 
 const validateForm = () => {

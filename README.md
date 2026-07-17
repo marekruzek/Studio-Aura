@@ -1,21 +1,39 @@
-# Studio-Aura
+Studio Aura
 
-Moderní responzivní web pro osobní prezentaci vlasové stylistky Anny Novotné.
+Frontend projekt vytvořený v HTML, CSS a JavaScriptu.
 
-## Obsah
+Responzivní prezentační web pro osobní vlasové studio zaměřené na moderní střihy, balayage, přirozené barvení a péči o zdravé vlasy. Design je postavený na elegantní typografii, velké hero sekci, galerii prací, jemných animacích a přehledné struktuře pro rychlou orientaci návštěvníka.
 
-- Hero sekce s CTA tlačítky
-- O mně, zkušenosti a služby
-- Galerie prací s lightboxem
-- Ceník, recenze se sliderem a FAQ accordion
-- Kontakt s validačním formulářem
+Co projekt obsahuje
 
-## Technologie
+* responzivní design
+* jednostránkovou navigaci s další stránkou galerie
+* hero sekci s výzvami k akci
+* sekci o stylistce a zkušenostech
+* galerii prací s lightboxem
+* ceník služeb
+* recenze se sliderem
+* FAQ accordion
+* kontaktní formulář se základní validací
 
-- HTML
-- CSS
-- JavaScript bez frameworků
+Technologie
 
-## Spuštění
+* HTML
+* CSS
+* JavaScript
+* Git
+* GitHub Pages
 
-Otevřete soubor `index.html` v prohlížeči. Projekt nepotřebuje build ani lokální server.
+Co jsem se na projektu naučil
+
+* navrhnout moderní prezentační web pro službu
+* pracovat s responzivním layoutem a mobilní navigací
+* vytvořit galerii s lightboxem
+* přidat interaktivní prvky pomocí JavaScriptu
+* připravit kontaktní formulář s validací
+* pracovat s vizuální hierarchií, sekcemi a CTA prvky
+* připravit projekt jako součást svého portfolia
+
+Live Demo
+
+https://marekruzek.github.io/Studio-Aura/
