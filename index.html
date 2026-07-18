@@ -204,7 +204,7 @@
           </div>
           <div class="accordion__item">
             <button type="button" aria-expanded="false">Mohu se objednat online?</button>
-            <p>Ano, poptávku můžete odeslat přes kontaktní formulář. Ozvu se vám s nejbližšími termíny.</p>
+            <p>Ano, v rezervačním formuláři si vyberete službu, datum a jeden z dostupných časů.</p>
           </div>
         </div>
       </div>
@@ -213,8 +213,14 @@
     <section class="section contact" id="contact">
       <div class="section__inner contact__grid">
         <div class="contact__info reveal">
-          <p class="eyebrow">Kontakt</p>
-          <h2>Objednejte se do Studia Aura</h2>
+          <p class="eyebrow">Online rezervace</p>
+          <h2>Vyberte si svůj termín</h2>
+          <p class="contact__intro">Rezervaci zvládnete během chvilky. Zvolte službu, volný termín a doplňte své kontaktní údaje.</p>
+          <ul class="contact__benefits" aria-label="Výhody online rezervace">
+            <li>Rezervace kdykoliv, 24 hodin denně</li>
+            <li>Okamžitý přehled dostupných termínů</li>
+            <li>Potvrzení rezervace e-mailem</li>
+          </ul>
           <address>
             <strong>Studio Aura</strong>
             <span>Ukázková 24, Praha</span>
@@ -224,33 +230,70 @@
           </address>
         </div>
         <form class="contact-form reveal" data-form novalidate>
-          <label>Jméno
-            <input type="text" name="name" autocomplete="name" required>
-          </label>
-          <label>E-mail
-            <input type="email" name="email" autocomplete="email" required>
-          </label>
-          <label>Telefon
-            <input type="tel" name="phone" autocomplete="tel" required>
-          </label>
-          <label>Požadovaná služba
+          <div class="booking-form__top">
+            <div>
+              <span class="booking-form__kicker">Rezervace termínu</span>
+              <h3>Naplánujte návštěvu</h3>
+            </div>
+            <span class="booking-form__demo">Demo systém</span>
+          </div>
+
+          <div class="booking-form__step">
+            <span>1</span>
+            <p>Vyberte službu</p>
+          </div>
+          <label class="booking-form__wide">Služba
             <select name="service" required>
               <option value="">Vyberte službu</option>
-              <option>Dámský střih</option>
-              <option>Balayage</option>
-              <option>Melír</option>
-              <option>Barvení vlasů</option>
-              <option>Tonování</option>
-              <option>Regenerační péče</option>
-              <option>Společenský účes</option>
-              <option>Konzultace změny účesu</option>
+              <option>Dámský střih · 60 min</option>
+              <option>Balayage · 180 min</option>
+              <option>Melír · 150 min</option>
+              <option>Barvení vlasů · 120 min</option>
+              <option>Tonování · 75 min</option>
+              <option>Regenerační péče · 45 min</option>
+              <option>Společenský účes · 90 min</option>
+              <option>Konzultace změny účesu · 30 min</option>
             </select>
           </label>
-          <label>Zpráva
-            <textarea name="message" rows="5" required></textarea>
+
+          <div class="booking-form__step booking-form__wide">
+            <span>2</span>
+            <p>Zvolte datum a čas</p>
+          </div>
+          <label>Datum
+            <input type="date" name="date" data-booking-date required>
           </label>
-          <p class="form-message" data-form-message aria-live="polite"></p>
-          <button class="button button--primary" type="submit">Odeslat poptávku</button>
+          <label>Čas
+            <select name="time" required>
+              <option value="">Vyberte čas</option>
+              <option>09:00</option>
+              <option>10:30</option>
+              <option>12:00</option>
+              <option>14:30</option>
+              <option>16:00</option>
+              <option>17:30</option>
+            </select>
+          </label>
+
+          <div class="booking-form__step booking-form__wide">
+            <span>3</span>
+            <p>Kontaktní údaje</p>
+          </div>
+          <label>Jméno
+            <input type="text" name="name" autocomplete="name" placeholder="Vaše jméno" required>
+          </label>
+          <label>Telefon
+            <input type="tel" name="phone" autocomplete="tel" placeholder="+420 000 000 000" required>
+          </label>
+          <label class="booking-form__wide">E-mail
+            <input type="email" name="email" autocomplete="email" placeholder="vas@email.cz" required>
+          </label>
+          <label class="booking-form__wide">Poznámka <small>nepovinné</small>
+            <textarea name="message" rows="3" placeholder="Napište nám cokoliv důležitého před návštěvou."></textarea>
+          </label>
+          <p class="form-message booking-form__wide" data-form-message aria-live="polite"></p>
+          <button class="button button--primary booking-form__submit booking-form__wide" type="submit">Potvrdit rezervaci</button>
+          <p class="booking-form__note booking-form__wide">Ukázkový formulář pro referenční web — rezervace se nikam neodesílá.</p>
         </form>
       </div>
     </section>

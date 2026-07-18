@@ -6,13 +6,20 @@ const lightbox = document.querySelector("[data-lightbox]");
 const lightboxImage = document.querySelector("[data-lightbox-image]");
 const lightboxCaption = document.querySelector("[data-lightbox-caption]");
 const lightboxClose = document.querySelector("[data-lightbox-close]");
+const lightboxLens = document.createElement("div");
 const accordionButtons = document.querySelectorAll("[data-accordion] button");
 const sliderTrack = document.querySelector("[data-slider-track]");
 const sliderPrev = document.querySelector("[data-slider-prev]");
 const sliderNext = document.querySelector("[data-slider-next]");
 const form = document.querySelector("[data-form]");
 const formMessage = document.querySelector("[data-form-message]");
+const bookingDate = document.querySelector("[data-booking-date]");
 const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+let isLightboxZoomActive = false;
+
+lightboxLens.className = "lightbox__lens";
+lightboxLens.setAttribute("aria-hidden", "true");
+lightbox.append(lightboxLens);
 
 const setHeaderState = () => {
   header.classList.toggle("is-scrolled", window.scrollY > 24);
@@ -72,8 +79,49 @@ galleryButtons.forEach((button) => {
   });
 });
 
+const updateLightboxLens = (event) => {
+  if (!isLightboxZoomActive) {
+    return;
+  }
+
+  const imageRect = lightboxImage.getBoundingClientRect();
+  const zoom = 1.7;
+  const lensSize = lightboxLens.offsetWidth;
+  const imageX = event.clientX - imageRect.left;
+  const imageY = event.clientY - imageRect.top;
+
+  lightboxLens.style.left = `${event.clientX}px`;
+  lightboxLens.style.top = `${event.clientY}px`;
+  lightboxLens.style.backgroundImage = `url(${JSON.stringify(lightboxImage.currentSrc || lightboxImage.src)})`;
+  lightboxLens.style.backgroundSize = `${imageRect.width * zoom}px ${imageRect.height * zoom}px`;
+  lightboxLens.style.backgroundPosition = `${lensSize / 2 - imageX * zoom}px ${lensSize / 2 - imageY * zoom}px`;
+  lightboxLens.classList.add("is-visible");
+};
+
+lightboxImage.addEventListener("click", (event) => {
+  isLightboxZoomActive = !isLightboxZoomActive;
+  lightboxImage.classList.toggle("is-zoom-active", isLightboxZoomActive);
+
+  if (isLightboxZoomActive) {
+    updateLightboxLens(event);
+  } else {
+    lightboxLens.classList.remove("is-visible");
+  }
+});
+
+lightboxImage.addEventListener("mousemove", (event) => {
+  updateLightboxLens(event);
+});
+
+lightboxImage.addEventListener("mouseleave", () => {
+  lightboxLens.classList.remove("is-visible");
+});
+
 const closeLightbox = () => {
+  isLightboxZoomActive = false;
   lightbox.classList.remove("is-open");
+  lightboxLens.classList.remove("is-visible");
+  lightboxImage.classList.remove("is-zoom-active");
   lightbox.setAttribute("aria-hidden", "true");
   lightboxImage.src = "";
   document.body.style.overflow = "";
@@ -189,19 +237,44 @@ const validateForm = () => {
 };
 
 if (form) {
-form.addEventListener("submit", (event) => {
-  event.preventDefault();
-  formMessage.classList.remove("is-success");
+  if (bookingDate) {
+    const today = new Date();
+    const maxDate = new Date(today);
+    const formatInputDate = (date) => {
+      const year = date.getFullYear();
+      const month = String(date.getMonth() + 1).padStart(2, "0");
+      const day = String(date.getDate()).padStart(2, "0");
 
-  if (!validateForm()) {
-    formMessage.textContent = "Vyplňte prosím všechna pole správně.";
-    return;
+      return `${year}-${month}-${day}`;
+    };
+
+    maxDate.setDate(maxDate.getDate() + 90);
+    bookingDate.min = formatInputDate(today);
+    bookingDate.max = formatInputDate(maxDate);
   }
 
-  form.reset();
-  formMessage.textContent = "Děkuji, poptávka byla připravena k odeslání.";
-  formMessage.classList.add("is-success");
-});
+  form.addEventListener("submit", (event) => {
+    event.preventDefault();
+    formMessage.classList.remove("is-success");
+
+    if (!validateForm()) {
+      formMessage.textContent = "Vyplňte prosím všechna povinná pole správně.";
+      return;
+    }
+
+    const formData = new FormData(form);
+    const selectedDate = new Date(`${formData.get("date")}T12:00:00`);
+    const formattedDate = new Intl.DateTimeFormat("cs-CZ", {
+      day: "numeric",
+      month: "long",
+      year: "numeric",
+    }).format(selectedDate);
+
+    form.reset();
+    form.querySelectorAll(".is-invalid").forEach((field) => field.classList.remove("is-invalid"));
+    formMessage.textContent = `Demo potvrzení: termín ${formattedDate} v ${formData.get("time")} je rezervovaný.`;
+    formMessage.classList.add("is-success");
+  });
 }
 
 const revealObserver = new IntersectionObserver((entries) => {
