@@ -28,10 +28,32 @@ const setHeaderState = () => {
 setHeaderState();
 window.addEventListener("scroll", setHeaderState, { passive: true });
 
+const closeMenu = () => {
+  nav.classList.remove("is-open");
+  header.classList.remove("is-open");
+  document.body.classList.remove("menu-open");
+  menuToggle.setAttribute("aria-expanded", "false");
+  menuToggle.setAttribute("aria-label", "Otevřít menu");
+};
+
 menuToggle.addEventListener("click", () => {
   const isOpen = nav.classList.toggle("is-open");
   header.classList.toggle("is-open", isOpen);
+  document.body.classList.toggle("menu-open", isOpen);
   menuToggle.setAttribute("aria-expanded", String(isOpen));
+  menuToggle.setAttribute("aria-label", isOpen ? "Zavřít menu" : "Otevřít menu");
+});
+
+document.addEventListener("click", (event) => {
+  if (nav.classList.contains("is-open") && !header.contains(event.target)) closeMenu();
+});
+
+document.addEventListener("keydown", (event) => {
+  if (event.key === "Escape") closeMenu();
+});
+
+window.addEventListener("resize", () => {
+  if (window.matchMedia("(min-width: 980px)").matches) closeMenu();
 });
 
 const getSectionCenterScrollTop = (section) => {
@@ -39,6 +61,25 @@ const getSectionCenterScrollTop = (section) => {
   const sectionCenter = window.scrollY + sectionRect.top + sectionRect.height / 2;
 
   return sectionCenter - window.innerHeight / 2;
+};
+
+const getSectionStartScrollTop = (section) => {
+  const sectionTop = window.scrollY + section.getBoundingClientRect().top;
+  const headerOffset = Math.max(0, header.offsetHeight - 40);
+
+  return sectionTop - headerOffset;
+};
+
+const getSectionScrollTop = (section) => {
+  const isMobile = window.matchMedia("(max-width: 759px)").matches;
+  const isTablet = window.matchMedia("(min-width: 760px) and (max-width: 979px)").matches;
+  const alignToStartOnTablet = section.matches("#work, #contact");
+
+  if (isMobile || (isTablet && alignToStartOnTablet)) {
+    return getSectionStartScrollTop(section);
+  }
+
+  return getSectionCenterScrollTop(section);
 };
 
 const getScrollBehavior = () => prefersReducedMotion.matches ? "auto" : "smooth";
@@ -53,11 +94,9 @@ nav.querySelectorAll('a[href^="#"]').forEach((link) => {
     }
 
     event.preventDefault();
-    nav.classList.remove("is-open");
-    header.classList.remove("is-open");
-    menuToggle.setAttribute("aria-expanded", "false");
+    closeMenu();
 
-    const targetPosition = getSectionCenterScrollTop(section);
+    const targetPosition = getSectionScrollTop(section);
     const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
 
     window.scrollTo({
@@ -272,7 +311,7 @@ if (form) {
 
     form.reset();
     form.querySelectorAll(".is-invalid").forEach((field) => field.classList.remove("is-invalid"));
-    formMessage.textContent = `Demo potvrzení: termín ${formattedDate} v ${formData.get("time")} je rezervovaný.`;
+    formMessage.textContent = `Demo potvrzení: termín ${formattedDate} v\u00a0${formData.get("time")} je rezervovaný.`;
     formMessage.classList.add("is-success");
   });
 }
