@@ -68,11 +68,26 @@ textarea {
 }
 
 .brand {
+  position: relative;
   display: inline-flex;
   align-items: center;
   gap: 10px;
   font-weight: 700;
   letter-spacing: 0;
+  transition: color 0.2s ease;
+}
+
+.brand::after {
+  position: absolute;
+  right: 0;
+  bottom: -5px;
+  left: 48px;
+  height: 1px;
+  background: var(--gold);
+  transform: scaleX(0);
+  transform-origin: center;
+  transition: transform 0.2s ease;
+  content: "";
 }
 
 .brand__mark {
@@ -84,6 +99,27 @@ textarea {
   color: var(--gold);
   font-family: "Playfair Display", Georgia, serif;
   font-size: 22px;
+  transition: color 0.2s ease, background 0.2s ease, transform 0.2s ease;
+}
+
+@media (hover: hover) {
+  .brand:hover {
+    color: var(--gold);
+  }
+
+  .site-header.is-scrolled .brand:hover,
+  .site-header.is-open .brand:hover {
+    color: var(--gold-dark);
+  }
+
+  .brand:hover::after {
+    transform: scaleX(1);
+  }
+
+  .brand:hover .brand__mark {
+    background: rgba(212, 175, 106, 0.12);
+    transform: translateY(-1px);
+  }
 }
 
 .nav {
