@@ -324,15 +324,49 @@ if (form) {
     };
 
     bookingDate.closest("label").addEventListener("click", (event) => {
+      if (event.target === bookingDate && typeof bookingDate.showPicker === "function") {
+        return;
+      }
+
       if (event.target !== bookingDate) {
         event.preventDefault();
       }
 
       openDatePicker();
     });
-    bookingDate.addEventListener("copy", (event) => event.preventDefault());
-    bookingDate.addEventListener("cut", (event) => event.preventDefault());
-    bookingDate.addEventListener("selectstart", (event) => event.preventDefault());
+
+    bookingDate.addEventListener("pointerdown", (event) => {
+      if (typeof bookingDate.showPicker !== "function") {
+        return;
+      }
+
+      event.preventDefault();
+
+      try {
+        bookingDate.showPicker();
+      } catch {
+        bookingDate.focus({ preventScroll: true });
+      }
+    });
+
+    const preventDateSelection = (event) => {
+      if (event.target === bookingDate || bookingDate.closest("label").contains(event.target)) {
+        event.preventDefault();
+      }
+    };
+
+    ["copy", "cut", "selectstart", "dragstart", "contextmenu"].forEach((eventName) => {
+      document.addEventListener(eventName, preventDateSelection, true);
+    });
+
+    bookingDate.addEventListener("keydown", (event) => {
+      const blockedShortcut = (event.ctrlKey || event.metaKey)
+        && ["a", "c", "x"].includes(event.key.toLowerCase());
+
+      if (blockedShortcut) {
+        event.preventDefault();
+      }
+    });
 
     const today = new Date();
     const maxDate = new Date(today);

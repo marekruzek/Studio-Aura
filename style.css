@@ -643,9 +643,25 @@ h2 {
 
   .contact-form .booking-form__panel {
     display: grid;
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
     grid-column: 1 / -1;
     grid-template-columns: minmax(0, 1fr);
     gap: 16px;
+  }
+
+  .contact-form .booking-form__panel > label {
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
+    grid-column: 1 / -1;
+  }
+
+  [data-booking-date] {
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
   }
 
   .contact-form .booking-form__panel[hidden] {
@@ -972,12 +988,44 @@ h2 {
 }
 
 .contact-form label:has([data-booking-date]) {
+  min-width: 0;
+  max-width: 100%;
+  overflow: hidden;
   cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
 }
 
 [data-booking-date] {
+  display: block;
+  inline-size: 100%;
+  min-inline-size: 0;
+  max-inline-size: 100%;
+  overflow: hidden;
+  line-height: normal;
+  font-variant-numeric: tabular-nums;
   user-select: none;
   -webkit-user-select: none;
+  -webkit-touch-callout: none;
+}
+
+[data-booking-date]::-webkit-date-and-time-value {
+  min-height: 1.6em;
+  margin: 0;
+  text-align: left;
+}
+
+[data-booking-date]::-webkit-datetime-edit {
+  padding: 0;
+}
+
+[data-booking-date]::-webkit-datetime-edit-day-field:focus,
+[data-booking-date]::-webkit-datetime-edit-month-field:focus,
+[data-booking-date]::-webkit-datetime-edit-year-field:focus {
+  color: inherit;
+  background: transparent;
+  outline: none;
 }
 
 .contact-form label small {
@@ -999,6 +1047,11 @@ h2 {
   color: var(--ink);
   background: var(--cream);
   outline: none;
+}
+
+.contact-form input,
+.contact-form select {
+  min-height: 48px;
 }
 
 .contact-form input:focus,
