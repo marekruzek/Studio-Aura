@@ -18,12 +18,28 @@ const bookingTime = form?.querySelector('[name="time"]');
 const bookingMessage = form?.querySelector('[name="message"]');
 const bookingSubmit = form?.querySelector('[type="submit"]');
 const bookingNote = form?.querySelector(".booking-form__note");
+const backToTopButton = document.querySelector(".back-to-top");
 const bookingPanels = form ? {
   datetime: form.querySelector('[data-booking-panel="datetime"]'),
   contact: form.querySelector('[data-booking-panel="contact"]'),
 } : {};
 const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
 let isLightboxZoomActive = false;
+
+const updateBackToTop = () => {
+  backToTopButton?.classList.toggle(
+    "is-visible",
+    window.scrollY > 700 && window.matchMedia("(max-width: 979px)").matches
+  );
+};
+
+updateBackToTop();
+window.addEventListener("scroll", updateBackToTop, { passive: true });
+window.addEventListener("resize", updateBackToTop, { passive: true });
+
+backToTopButton?.addEventListener("click", () => {
+  window.scrollTo({ top: 0, behavior: prefersReducedMotion.matches ? "auto" : "smooth" });
+});
 
 lightboxLens.className = "lightbox__lens";
 lightboxLens.setAttribute("aria-hidden", "true");

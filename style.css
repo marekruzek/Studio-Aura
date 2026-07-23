@@ -587,6 +587,45 @@ h2 {
   margin-top: 22px;
 }
 
+.back-to-top {
+  position: fixed;
+  right: max(16px, env(safe-area-inset-right));
+  bottom: max(16px, env(safe-area-inset-bottom));
+  z-index: 19;
+  display: none;
+  width: 46px;
+  height: 46px;
+  place-items: center;
+  border: 1px solid rgba(212, 175, 106, 0.7);
+  border-radius: 0;
+  background: rgba(251, 246, 237, 0.92);
+  color: var(--gold-dark);
+  box-shadow: 0 12px 30px rgba(13, 11, 9, 0.14);
+  backdrop-filter: blur(14px);
+  cursor: pointer;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(12px);
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.back-to-top:focus-visible {
+  outline: 3px solid rgba(212, 175, 106, 0.35);
+  outline-offset: 3px;
+}
+
+@media (max-width: 979px) {
+  .back-to-top {
+    display: grid;
+  }
+
+  .back-to-top.is-visible {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateY(0);
+  }
+}
+
 @media (max-width: 759px) {
   .gallery,
   .gallery.gallery--full {
