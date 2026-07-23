@@ -131,6 +131,10 @@
             <img src="images/portfolio/portfolio-08.png" alt="Jemný slavnostní vlasový styling" loading="lazy">
             <span>Jemný slavnostní styling</span>
           </button>
+          <button class="gallery__item reveal" type="button" data-caption="Popelavě hnědá balayage" data-src="images/portfolio/portfolio-09.png">
+            <img src="images/portfolio/portfolio-09.png" alt="Popelavě hnědá balayage v jemných vlnách" loading="lazy">
+            <span>Popelavě hnědá balayage</span>
+          </button>
         </div>
         <div class="work__actions reveal">
           <a class="button button--ghost" href="mojeprace.html">Ukázat vše</a>
@@ -219,7 +223,7 @@
         <div class="contact__info reveal">
           <h2>Rezervace a&nbsp;kontakt</h2>
           <p class="contact__intro">Vyberte si službu a&nbsp;volný termín, který vám vyhovuje. Rezervaci jednoduše dokončíte vyplněním kontaktních údajů. Pokud si nejste jistí výběrem nebo máte dotaz, neváhejte se ozvat.</p>
-          <address>
+          <address class="contact__address">
             <strong>Studio Aura</strong>
             <span>Ukázková 24, Praha</span>
             <span>+420 000 000 000</span>
@@ -236,6 +240,7 @@
             <span class="booking-form__demo">Demo systém</span>
           </div>
 
+          <div class="booking-form__panel" data-booking-panel="service">
           <div class="booking-form__step">
             <span>1</span>
             <p>Vyberte službu</p>
@@ -254,6 +259,9 @@
             </select>
           </label>
 
+          </div>
+
+          <div class="booking-form__panel" data-booking-panel="datetime">
           <div class="booking-form__step booking-form__wide">
             <span>2</span>
             <p>Zvolte datum a&nbsp;čas</p>
@@ -273,6 +281,9 @@
             </select>
           </label>
 
+          </div>
+
+          <div class="booking-form__panel" data-booking-panel="contact">
           <div class="booking-form__step booking-form__wide">
             <span>3</span>
             <p>Kontaktní údaje</p>
@@ -292,6 +303,7 @@
           <p class="form-message booking-form__wide" data-form-message aria-live="polite"></p>
           <button class="button button--primary booking-form__submit booking-form__wide" type="submit">Potvrdit rezervaci</button>
           <p class="booking-form__note booking-form__wide">Ukázkový formulář pro referenční web — rezervace se nikam neodesílá.</p>
+          </div>
         </form>
       </div>
     </section>

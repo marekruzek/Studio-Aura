@@ -14,6 +14,14 @@ const sliderNext = document.querySelector("[data-slider-next]");
 const form = document.querySelector("[data-form]");
 const formMessage = document.querySelector("[data-form-message]");
 const bookingDate = document.querySelector("[data-booking-date]");
+const bookingTime = form?.querySelector('[name="time"]');
+const bookingMessage = form?.querySelector('[name="message"]');
+const bookingSubmit = form?.querySelector('[type="submit"]');
+const bookingNote = form?.querySelector(".booking-form__note");
+const bookingPanels = form ? {
+  datetime: form.querySelector('[data-booking-panel="datetime"]'),
+  contact: form.querySelector('[data-booking-panel="contact"]'),
+} : {};
 const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
 let isLightboxZoomActive = false;
 
@@ -190,10 +198,18 @@ accordionButtons.forEach((button) => {
     button.setAttribute("aria-expanded", "false");
   };
 
-  item.addEventListener("mouseenter", openItem);
-  item.addEventListener("mouseleave", closeItem);
-  button.addEventListener("focus", openItem);
-  button.addEventListener("blur", closeItem);
+  if (window.matchMedia("(hover: hover) and (pointer: fine)").matches) {
+    item.addEventListener("mouseenter", openItem);
+    item.addEventListener("mouseleave", closeItem);
+  }
+
+  button.addEventListener("click", () => {
+    if (item.classList.contains("is-open")) {
+      closeItem();
+    } else {
+      openItem();
+    }
+  });
 });
 
 let reviewIndex = 1;
@@ -276,7 +292,46 @@ const validateForm = () => {
 };
 
 if (form) {
+  const updateBookingPanels = () => {
+    const isMobile = window.matchMedia("(max-width: 759px)").matches;
+    const hasDate = Boolean(bookingDate.value);
+
+    bookingPanels.datetime.hidden = false;
+    bookingPanels.contact.hidden = false;
+    bookingTime.closest("label").hidden = isMobile && !hasDate;
+    bookingMessage.closest("label").hidden = false;
+    formMessage.hidden = false;
+    bookingSubmit.hidden = false;
+    bookingNote.hidden = false;
+  };
+
+  bookingDate.addEventListener("input", updateBookingPanels);
+  window.addEventListener("resize", updateBookingPanels);
+
   if (bookingDate) {
+    const openDatePicker = () => {
+      bookingDate.focus();
+
+      if (typeof bookingDate.showPicker === "function") {
+        try {
+          bookingDate.showPicker();
+        } catch {
+          // The browser still keeps the date field focused when no native picker is available.
+        }
+      }
+    };
+
+    bookingDate.closest("label").addEventListener("click", (event) => {
+      if (event.target !== bookingDate) {
+        event.preventDefault();
+      }
+
+      openDatePicker();
+    });
+    bookingDate.addEventListener("copy", (event) => event.preventDefault());
+    bookingDate.addEventListener("cut", (event) => event.preventDefault());
+    bookingDate.addEventListener("selectstart", (event) => event.preventDefault());
+
     const today = new Date();
     const maxDate = new Date(today);
     const formatInputDate = (date) => {
@@ -291,6 +346,8 @@ if (form) {
     bookingDate.min = formatInputDate(today);
     bookingDate.max = formatInputDate(maxDate);
   }
+
+  updateBookingPanels();
 
   form.addEventListener("submit", (event) => {
     event.preventDefault();

@@ -562,6 +562,10 @@ h2 {
     min-height: 0;
   }
 
+  .gallery:not(.gallery--full) .gallery__item:nth-child(n + 7) {
+    display: none;
+  }
+
   .gallery__item span {
     padding: 42px 10px 10px;
     font-size: 12px;
@@ -571,10 +575,45 @@ h2 {
   .contact-form,
   .contact-form.reveal,
   .contact-form.reveal.is-visible {
+    order: 3;
     position: static;
+    width: 100%;
+    min-width: 0;
     opacity: 1;
     transform: none;
     transition: none;
+  }
+
+  .contact__info,
+  .contact__info.reveal,
+  .contact__info.reveal.is-visible {
+    display: contents;
+    opacity: 1;
+    transform: none;
+  }
+
+  .contact__info h2 {
+    order: 1;
+  }
+
+  .contact__intro {
+    order: 2;
+  }
+
+  .contact__address {
+    order: 4;
+    margin-top: 0;
+  }
+
+  .contact-form .booking-form__panel {
+    display: grid;
+    grid-column: 1 / -1;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 16px;
+  }
+
+  .contact-form .booking-form__panel[hidden] {
+    display: none;
   }
 }
 
@@ -751,7 +790,7 @@ h2 {
   background: linear-gradient(to bottom, rgba(246, 237, 223, 0.32), rgba(19, 15, 12, 0));
 }
 
-.contact__info address {
+.contact__address {
   display: grid;
   gap: 10px;
   margin-top: 28px;
@@ -803,10 +842,19 @@ h2 {
 
 .contact-form {
   display: grid;
+  min-width: 0;
   gap: 16px;
   padding: clamp(22px, 4vw, 34px);
   color: var(--ink);
   background: var(--white);
+}
+
+.booking-form__panel {
+  display: contents;
+}
+
+.contact-form [hidden] {
+  display: none;
 }
 
 .booking-form__top {
@@ -879,11 +927,21 @@ h2 {
 
 .contact-form label {
   display: grid;
+  min-width: 0;
   gap: 7px;
   font-size: 13px;
   font-weight: 800;
   text-transform: uppercase;
   letter-spacing: 0.08em;
+}
+
+.contact-form label:has([data-booking-date]) {
+  cursor: pointer;
+}
+
+[data-booking-date] {
+  user-select: none;
+  -webkit-user-select: none;
 }
 
 .contact-form label small {
@@ -898,6 +956,8 @@ h2 {
 .contact-form select,
 .contact-form textarea {
   width: 100%;
+  min-width: 0;
+  max-width: 100%;
   border: 1px solid var(--line);
   padding: 13px 14px;
   color: var(--ink);
