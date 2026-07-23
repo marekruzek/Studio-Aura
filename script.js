@@ -87,12 +87,14 @@ const getSectionScrollTop = (section) => {
     return getSectionStartScrollTop(section);
   }
 
-  return getSectionCenterScrollTop(section);
+  const desktopOffset = section.matches("#contact") ? 36 : 0;
+
+  return getSectionCenterScrollTop(section) - desktopOffset;
 };
 
 const getScrollBehavior = () => prefersReducedMotion.matches ? "auto" : "smooth";
 
-nav.querySelectorAll('a[href^="#"]').forEach((link) => {
+document.querySelectorAll('[data-nav] a[href^="#"], .hero__actions a[href="#contact"]').forEach((link) => {
   link.addEventListener("click", (event) => {
     const sectionId = link.getAttribute("href");
     const section = sectionId ? document.querySelector(sectionId) : null;
