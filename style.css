@@ -999,11 +999,17 @@ h2 {
 
 [data-booking-date] {
   display: block;
+  flex: 1 1 0;
   inline-size: 100%;
   min-inline-size: 0;
   max-inline-size: 100%;
+  block-size: 48px;
   overflow: hidden;
+  -webkit-appearance: none;
+  appearance: none;
   line-height: normal;
+  text-align: left;
+  text-align-last: left;
   font-variant-numeric: tabular-nums;
   user-select: none;
   -webkit-user-select: none;
@@ -1011,13 +1017,18 @@ h2 {
 }
 
 [data-booking-date]::-webkit-date-and-time-value {
+  display: block;
+  width: 100%;
   min-height: 1.6em;
   margin: 0;
   text-align: left;
 }
 
 [data-booking-date]::-webkit-datetime-edit {
+  display: block;
+  width: 100%;
   padding: 0;
+  text-align: left;
 }
 
 [data-booking-date]::-webkit-datetime-edit-day-field:focus,
